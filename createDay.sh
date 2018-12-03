@@ -1,3 +1,4 @@
+#!/bin/bash
 if [ ! -d "$1" ]; then
   echo "Creating directory for day: $1"
   mkdir $1

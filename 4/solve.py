@@ -4,8 +4,6 @@ import datetime as dt
 from operator import attrgetter
 from collections import Counter
 
-timeOnly = True if len(sys.argv) > 1 and sys.argv[1] == '1' else False
-
 with open('input.txt') as file:
     log = file.readlines()
 log = map(lambda x: (x.replace('\n', '')), log)
@@ -55,12 +53,13 @@ def part2():
 
     return int(maxMinute) * int(guardId)
 
-def writeResponse(star, start, solution, timeOnly):
+def writeResponse(star, start, solution):
+    timeOnly = True if len(sys.argv) > 1 and sys.argv[1] == '1' else False
     print('Part #%s' % star)
     if (not timeOnly):
         print('Solution: %s') % solution
     end = dt.datetime.now()
     print 'Execution time: %sms' % int((end - start).total_seconds() * 1000)
 
-writeResponse(1, dt.datetime.now(), part1(), timeOnly)
-writeResponse(2, dt.datetime.now(), part2(), timeOnly)
+writeResponse(1, dt.datetime.now(), part1())
+writeResponse(2, dt.datetime.now(), part2())

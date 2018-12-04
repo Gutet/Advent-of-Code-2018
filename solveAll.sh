@@ -4,7 +4,7 @@ do
     if [ -d "$DAY" ]; then
         echo "========== DAY: $DAY =========="
         cd $DAY
-        python solve.py
+        python solve.py $1
         cd ..
     fi
 done

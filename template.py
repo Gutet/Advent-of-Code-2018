@@ -1,8 +1,10 @@
+#!/usr/bin/python
+import re, sys
 import datetime as dt
 
 with open('test.txt') as file:
-    claims = file.readlines()
-claims = map(lambda x: (x.replace('\n', '')), claims)
+    inputlist = file.readlines()
+inputlist = map(lambda x: (x.replace('\n', '')), inputlist)
 
 def part1():
     return 0
@@ -10,12 +12,13 @@ def part1():
 def part2():
     return 0
 
-start = dt.datetime.now()
-print('Part #1: %s') % part1()
-end = dt.datetime.now()
-print 'Execution time: %sms' % int((end - start).total_seconds() * 1000)
+def writeResponse(star, start, solution):
+    timeOnly = True if len(sys.argv) > 1 and sys.argv[1] == '1' else False
+    print('Part #%s' % star)
+    if (not timeOnly):
+        print('Solution: %s') % solution
+    end = dt.datetime.now()
+    print 'Execution time: %sms' % int((end - start).total_seconds() * 1000)
 
-start = dt.datetime.now()
-print('Part #2: %s') % part2()
-end = dt.datetime.now()
-print 'Execution time: %sms' % int((end - start).total_seconds() * 1000)
+writeResponse(1, dt.datetime.now(), part1())
+writeResponse(2, dt.datetime.now(), part2())

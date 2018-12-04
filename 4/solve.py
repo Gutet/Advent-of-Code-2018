@@ -43,17 +43,13 @@ def part1():
     return int(mostSleepy) * int(mostMinute)
 
 def part2():
-    maxMinute = 0
-    maxCount = 0
-    guardId = 0
+    maxMinute, maxCount, guardId = 0, 0, 0
     for key, value in guardPattern.iteritems():
         temp = Counter(value).most_common()
         if len(temp) > 0:
             (minute, count) = temp[0]
             if (count > maxCount):
-                maxCount = count
-                maxMinute = minute
-                guardId = key
+                maxCount, maxMinute, guardId = count, minute, key
 
     return int(maxMinute) * int(guardId)
 

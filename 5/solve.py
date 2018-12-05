@@ -4,27 +4,27 @@ import datetime as dt
 
 with open('input.txt') as file:
     polymers = file.read()
-polymers = [ord(x) for x in list(polymers)]
-
-def checkDifference(a, b):
-    return (abs(a-b) == 32)
 
 def part1(p):
-    c = 0
-    while c < len(p) - 1:
-        if (checkDifference(p[c], p[c+1])):
-            del p[c]
-            del p[c]
-            c -= 2
-        c += 1
-    return p
+    i = 0
+    ret = ''
+    while i < len(p) - 1:
+        if (abs(ord(p[i]) - ord(p[i + 1])) == 32):
+            i += 2
+        elif (len(ret) > 0 and abs(ord(p[i]) - ord(ret[-1])) == 32):
+            i += 1
+            ret = ret[:-1]
+        else:
+            ret += p[i]
+            i += 1
+    return ret + p[-1]
 
 def part2(p):
     smallestLength = 100000
     p = part1(p)
     for i in list(range(65, 91)):
-        p2 = list(p)
-        p2 = filter(lambda a: a not in [i, i + 32], p2)
+        p2 = p
+        p2 = p2.replace(chr(i), "").replace(chr(i + 32), "")
         tempLength = len(part1(p2))
         if (tempLength < smallestLength):
             smallestLength = tempLength
@@ -38,5 +38,5 @@ def writeResponse(star, start, solution):
     end = dt.datetime.now()
     print 'Execution time: %sms' % int((end - start).total_seconds() * 1000)
 
-writeResponse(1, dt.datetime.now(), len(part1(list(polymers))))
-writeResponse(2, dt.datetime.now(), part2(list(polymers)))
+writeResponse(1, dt.datetime.now(), len(part1(polymers)))
+writeResponse(2, dt.datetime.now(), part2(polymers))

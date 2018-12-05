@@ -11,36 +11,28 @@ def checkDifference(a, b):
         return True
     return False
 
-def part1():
+def part1(p):
     while True:
         c = 0
-        while c < len(polymers) - 1:
-            if (checkDifference(polymers[c], polymers[c+1])):
-                del polymers[c]
-                del polymers[c]            
+        while c < len(p) - 1:
+            if (checkDifference(p[c], p[c+1])):
+                del p[c]
+                del p[c]            
                 c -= 2
             c += 1
-        if c == len(polymers) - 1:
+        if c == len(p) - 1:
             break
-    return len(polymers)
+    return p
 
-def part2():
+def part2(p):
     smallestLength = 100000
+    p = part1(p)
     for i in list(range(65, 91)):
-        polymers2 = list(polymers)
-        polymers2 = filter(lambda a: a not in [i, i + 32], polymers2)
-        while True:
-            c = 0
-            while c < len(polymers2) - 1:
-                if (checkDifference(polymers2[c], polymers2[c+1])):
-                    del polymers2[c]
-                    del polymers2[c]            
-                    c -= 2
-                c += 1
-            if c == len(polymers2) - 1:
-                break
-        if (len(polymers2) < smallestLength):
-            smallestLength = len(polymers2)
+        p2 = list(p)
+        p2 = filter(lambda a: a not in [i, i + 32], p2)
+        tempLength = len(part1(p2))
+        if (tempLength < smallestLength):
+            smallestLength = tempLength
     return smallestLength
 
 def writeResponse(star, start, solution):
@@ -51,5 +43,5 @@ def writeResponse(star, start, solution):
     end = dt.datetime.now()
     print 'Execution time: %sms' % int((end - start).total_seconds() * 1000)
 
-writeResponse(1, dt.datetime.now(), part1())
-writeResponse(2, dt.datetime.now(), part2())
+writeResponse(1, dt.datetime.now(), len(part1(list(polymers))))
+writeResponse(2, dt.datetime.now(), part2(list(polymers)))

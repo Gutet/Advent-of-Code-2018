@@ -7,21 +7,16 @@ with open('input.txt') as file:
 polymers = [ord(x) for x in list(polymers)]
 
 def checkDifference(a, b):
-    if (abs(a-b) == 32):
-        return True
-    return False
+    return (abs(a-b) == 32)
 
 def part1(p):
-    while True:
-        c = 0
-        while c < len(p) - 1:
-            if (checkDifference(p[c], p[c+1])):
-                del p[c]
-                del p[c]            
-                c -= 2
-            c += 1
-        if c == len(p) - 1:
-            break
+    c = 0
+    while c < len(p) - 1:
+        if (checkDifference(p[c], p[c+1])):
+            del p[c]
+            del p[c]
+            c -= 2
+        c += 1
     return p
 
 def part2(p):

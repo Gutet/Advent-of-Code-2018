@@ -45,30 +45,24 @@ def getBoundaries():
     max_y = max(inputList, key=attrgetter('pos_y'))
     return min_x.pos_x, min_y.pos_y, max_x.pos_x, max_y.pos_y
 
-def zeroBaseIt(x, y):
-    for i in range(len(inputList)):
-        inputList[i].pos_x = inputList[i].pos_x - x
-        inputList[i].pos_y = inputList[i].pos_y - y
-
 def printMatrix():
     global lastWidth
     global lastHeight
     # Create matrix
     x, y, xx, yy = getBoundaries()
     width = abs(x - xx) + 1
-    height = abs(y - yy) +1
+    height = abs(y - yy) + 1
 
     # Need to print?
     needToPrint = (lastHeight < height or lastWidth < width)
     if (needToPrint):
         calculateNewPos(True)
         x, y, xx, yy = getBoundaries()
-        zeroBaseIt(x, y)
         
         matrix = [['.' for w in range(lastWidth)] for h in range(lastHeight)]
         # Fill matrix
         for p in inputList:
-            matrix[p.pos_y][p.pos_x] = '#'
+            matrix[p.pos_y - y][p.pos_x - x] = '#'
         
         # Print matrix
         for row in matrix:

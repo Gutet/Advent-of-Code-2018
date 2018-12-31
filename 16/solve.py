@@ -35,6 +35,8 @@ operations = [
     'muli',
     'banr',
     'bani',
+    'borr',
+    'bori',
     'setr',
     'seti',
     'gtir',
@@ -49,57 +51,57 @@ def setRegister(line):
     m = re.search('.*\[(.*)\]', line)
     return list(map(int, m.group(1).strip().split(',')))
 
-def doOperation(op, reg, values):
+def doOperation(op, reg, A, B, C):
     if (op == 'addr'):
-        reg[values[2]] = reg[values[0]] + reg[values[1]]
+        reg[C] = reg[A] + reg[B]
     elif (op == 'addi'):
-        reg[values[2]] = reg[values[0]] + values[1]
+        reg[C] = reg[A] + B
     elif (op == 'mulr'):
-        reg[values[2]] = reg[values[0]] * reg[values[1]]
+        reg[C] = reg[A] * reg[B]
     elif (op == 'muli'):
-        reg[values[2]] = reg[values[0]] * values[1]
+        reg[C] = reg[A] * B
     elif (op == 'banr'):
-        reg[values[2]] = reg[values[0]] & reg[values[1]]
+        reg[C] = reg[A] & reg[B]
     elif (op == 'bani'):
-        reg[values[2]] = reg[values[0]] & values[1]
+        reg[C] = reg[A] & B
     elif (op == 'borr'):
-        reg[values[2]] = reg[values[0]] | reg[values[1]]
+        reg[C] = reg[A] | reg[B]
     elif (op == 'bori'):
-        reg[values[2]] = reg[values[0]] | values[1]
+        reg[C] = reg[A] | B
     elif (op == 'setr'):
-        reg[values[2]] = reg[values[0]]
+        reg[C] = reg[A]
     elif (op == 'seti'):
-        reg[values[2]] = values[0]
+        reg[C] = A
     elif (op == 'gtir'):
-        if (values[0] > reg[values[1]]):
-            reg[values[2]] = 1
+        if (A > reg[B]):
+            reg[C] = 1
         else:
-            reg[values[2]] = 0
+            reg[C] = 0
     elif (op == 'gtri'):
-        if (reg[values[0]] > values[1]):
-            reg[values[2]] = 1
+        if (reg[A] > B):
+            reg[C] = 1
         else:
-            reg[values[2]] = 0
+            reg[C] = 0
     elif (op == 'gtrr'):
-        if (reg[values[0]] > reg[values[1]]):
-            reg[values[2]] = 1
+        if (reg[A] > reg[B]):
+            reg[C] = 1
         else:
-            reg[values[2]] = 0
+            reg[C] = 0
     elif (op == 'eqir'):
-        if (values[0] == reg[values[1]]):
-            reg[values[2]] = 1
+        if (A == reg[B]):
+            reg[C] = 1
         else:
-            reg[values[2]] = 0
+            reg[C] = 0
     elif (op == 'eqri'):
-        if (reg[values[0]] == values[1]):
-            reg[values[2]] = 1
+        if (reg[A] == B):
+            reg[C] = 1
         else:
-            reg[values[2]] = 0
+            reg[C] = 0
     elif (op == 'eqrr'):
-        if (reg[values[0]] == reg[values[1]]):
-            reg[values[2]] = 1
+        if (reg[A] == reg[B]):
+            reg[C] = 1
         else:
-            reg[values[2]] = 0
+            reg[C] = 0
     else:
         print 'Illegal operator'
         sys.exit(0)
@@ -135,10 +137,11 @@ def part1(iList):
         for op in operations:
             currentReg = setRegister(iList[pos])
             values = list(map(int, iList[pos + 1].split()))
-            tempReg = doOperation(op, currentReg, values[1:])
+            tempReg = doOperation(op, currentReg, values[1], values[2], values[3])
 
             if (tempReg == finalReg):
-                opCodes[values[0]].append(op)
+                if op not in opCodes[values[0]]:
+                    opCodes[values[0]].append(op)
                 opCodeCount += 1
 
         if (opCodeCount >= 3):
@@ -150,24 +153,15 @@ def part1(iList):
     return totalSamples
 
 def part2(iList):
-    # Recalculate opCodes
-    for k, v in opCodes.iteritems():
-        opCodes[k] = list(set(opCodes[k]))
-
     while (getMaxCountPerCode() > 1):
         delCode, key = getCodeToRemove()
         removeCode(delCode, key)
-
-    print(opCodes)
 
     # All opcodes done, handle input
     reg = [0, 0, 0, 0]
     for line in iList:
         stuff = list(map(int, line.split()))
-        print(reg)
-        print('%s: %s' % (opCodes[stuff[0]][0], stuff[1:]))
-        #raw_input('Press enter to continue: ')
-        reg = doOperation(opCodes[stuff[0]][0], reg, stuff[1:])
+        reg = doOperation(opCodes[stuff[0]][0], reg, stuff[1], stuff[2], stuff[3])
     return reg[0]
 
 def writeResponse(star, start, solution):
